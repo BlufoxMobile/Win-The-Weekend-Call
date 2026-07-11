@@ -754,4 +754,38 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
 })();
 </script>
 
+<script>
+/* === FIT-TO-SCREEN: auto-scale the active slide so it fully fits any screen === */
+(function(){
+  function fitSlide(el){
+    if(!el) return;
+    el.style.zoom = '';
+    for(var i=0;i<3;i++){
+      var z = parseFloat(el.style.zoom) || 1;
+      var needH = el.scrollHeight, haveH = el.clientHeight;
+      var needW = el.scrollWidth,  haveW = el.clientWidth;
+      if(needH <= haveH + 1 && needW <= haveW + 1) break;
+      var nz = Math.max(.4, z * Math.min(haveH/needH, haveW/needW));
+      if(Math.abs(nz - z) < .01) break;
+      el.style.zoom = nz;
+    }
+  }
+  function fitActive(){
+    var els = document.querySelectorAll('#D .s.a');
+    for(var i=0;i<els.length;i++) fitSlide(els[i]);
+  }
+  var t;
+  window.addEventListener('resize', function(){ clearTimeout(t); t = setTimeout(fitActive, 120); });
+  function boot(){
+    var D = document.getElementById('D');
+    if(D){
+      new MutationObserver(function(){ requestAnimationFrame(fitActive); })
+        .observe(D, { attributes:true, attributeFilter:['class'], subtree:true, childList:true });
+    }
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitActive);
+    fitActive();
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+</script>
 </body></html>
