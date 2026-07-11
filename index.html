@@ -765,7 +765,7 @@ if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded"
       var needH = el.scrollHeight, haveH = el.clientHeight;
       var needW = el.scrollWidth,  haveW = el.clientWidth;
       if(needH <= haveH + 1 && needW <= haveW + 1) break;
-      var nz = Math.max(.4, z * Math.min(haveH/needH, haveW/needW));
+      var nz = Math.max(.15, z * Math.min(haveH/needH, haveW/needW));
       if(Math.abs(nz - z) < .01) break;
       el.style.zoom = nz;
     }
