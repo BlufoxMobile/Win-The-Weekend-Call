@@ -355,8 +355,15 @@ function parseWB(wb){
   stores.sort(function(a,b){return b.sc-a.sc});
   var dr=findHdr(wb.Sheets['District Rank'],'Rank','DM');var dms=[];
   if(dr){var myD=R==='Chicago'?['Jacob Cabrales','Juan Carrillo','Imaad Dhorajiwala']:['Matthew Brooks'];
-  for(var i=dr.idx+1;i<dr.data.length;i++){var r=dr.data[i];if(!r||!r[1])continue;var dm=String(r[1]).trim();if(myD.indexOf(dm)<0)continue;
-  dms.push({rk:r[0],dm:dm,gp:r[2]||0,fcr:((r[5]||0)*100),mcr:((r[7]||0)*100),pp:((r[24]||0)*100),up:((r[29]||0)*100),acc:r[31]||0,nps:((r[32]||0)*100),sc:r[59]||0,pts:r[58]||0,gpr:r[35]||0,mcrr:r[38]||0,ntr:r[41]||0,upgr:r[44]||0,accr:r[47]||0,npsr:r[50]||0,premr:r[56]||0})}}
+  /* The sheet's per-metric "Rank" columns hold POINTS (best district = N, worst = 1).
+     Collect every district's points so we can display an honest company-wide rank (1 = best). */
+  var DRC={gpr:35,mcrr:38,ntr:41,upgr:44,accr:47,npsr:50,premr:56},allPts={},k;for(k in DRC)allPts[k]=[];
+  for(var i=dr.idx+1;i<dr.data.length;i++){var r=dr.data[i];if(!r||!r[1])continue;var dm=String(r[1]).trim();
+  for(k in DRC){var pv=r[DRC[k]]||0;if(pv>0)allPts[k].push(pv)}
+  if(myD.indexOf(dm)<0)continue;
+  dms.push({rk:r[0],dm:dm,gp:r[2]||0,fcr:((r[5]||0)*100),mcr:((r[7]||0)*100),pp:((r[24]||0)*100),up:((r[29]||0)*100),acc:r[31]||0,nps:((r[32]||0)*100),sc:r[59]||0,pts:r[58]||0,gpr:r[35]||0,mcrr:r[38]||0,ntr:r[41]||0,upgr:r[44]||0,accr:r[47]||0,npsr:r[50]||0,premr:r[56]||0})}
+  /* points -> competition rank: 1 + districts with strictly more points (ties share a rank) */
+  dms.forEach(function(d){for(var k2 in DRC){var v=d[k2];if(!(v>0))continue;var better=0;for(var j=0;j<allPts[k2].length;j++){if(allPts[k2][j]>v)better++}d[k2]=better+1}})}
   dms.sort(function(a,b){return a.rk-b.rk});
   var rr=findHdr(wb.Sheets['Rep Rank'],'Rank','Employee');var reps=[];
   if(rr){for(var i=rr.idx+1;i<rr.data.length;i++){var r=rr.data[i];if(!r||!r[3])continue;var loc=String(r[3]).trim();if(stl.indexOf(loc)<0)continue;
