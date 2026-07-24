@@ -426,6 +426,7 @@ function buildNpsFromRepo(mtd,sd){
     var top;
     if(qualified.length>=10){top=qualified.slice(0,10);}
     else{var rest=arr.filter(function(r){return r.surveys<NPS_MIN_SURVEYS});top=qualified.concat(rest).slice(0,10);}
+    top.sort(function(a,b){return b.nps-a.nps||b.surveys-a.surveys;}); /* display strictly high->low regardless of survey-floor fill order */
     top=top.map(function(r,i){return{rank:i+1,name:r.name,surveys:r.surveys,nps:r.nps};});
     if(top.length)npsData[NPS_LABEL[d]]=top;
   });
