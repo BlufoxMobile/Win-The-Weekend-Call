@@ -853,7 +853,7 @@ var WTW_REPOS={
   chicago:{owner:'BlufoxMobile',name:'Win-The-Weekend---Chicago',label:'Greater Chicago',url:'https://blufoxmobile.github.io/Win-The-Weekend---Chicago/'},
   bigsouth:{owner:'BlufoxMobile',name:'Win-The-Weekend---Big-South',label:'Big South',url:'https://blufoxmobile.github.io/Win-The-Weekend---Big-South/'}
 };
-var WTW_WORKER_URL='';/* paste your Cloudflare Worker URL between the quotes to bake it in; otherwise the closing slide asks once and remembers it */
+var WTW_WORKER_URL='https://wtw-publish.jeff-bilbrey-jb.workers.dev';/* paste your Cloudflare Worker URL between the quotes to bake it in; otherwise the closing slide asks once and remembers it */
 function wtwWorkerURL(){if(WTW_WORKER_URL)return WTW_WORKER_URL;var f=document.getElementById('workerUrl');var v=(f&&f.value||'').trim();if(!v){try{v=localStorage.getItem('wtw_worker_url')||'';}catch(e){}}return v;}
 function wtwSaveStatus(msg,cls){var s=document.getElementById('saveStatus');if(s){s.className='saveStatus '+(cls||'');s.innerHTML=msg;}}
 function wtwToken(){var f=document.getElementById('ghToken');var t=(f&&f.value||'').trim();if(!t){try{t=localStorage.getItem('wtw_gh_token')||'';}catch(e){}}return t;}
